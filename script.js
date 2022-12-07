@@ -13,12 +13,15 @@ const winConditions = [
    [0, 4, 8],
    [2, 4, 6],
 ];
-let xTurn = true;
+let xTurn;
 let player = "circle";
+let clicked;
 
 window.addEventListener("load", startGame);
 function startGame() {
-   board.classList.add("x");
+   xTurn = true;
+   clicked = 0;
+   boardHoverEffect();
 }
 
 cells.forEach((c) => {
@@ -28,6 +31,7 @@ cells.forEach((c) => {
 function clickCell() {
    if (this.classList.contains("x") || this.classList.contains("circle"))
       return;
+   clicked++;
    xTurn ? this.classList.add("x") : this.classList.add("circle");
    switchTurns();
    switchPlayer();
@@ -37,11 +41,11 @@ function clickCell() {
       player == "x"
          ? (winMsg.textContent = `X wins`)
          : (winMsg.textContent = `O wins`);
-      player == "x" ? (xTurn = true) : (xTurn = false);
-      boardHoverEffect();
+   } else if (clicked == 9) {
+      overlay.classList.add("show");
+      winMsg.textContent = `IT'S A DRAW!`;
    }
 }
-
 function boardHoverEffect() {
    board.classList.remove("x", "circle");
    xTurn ? board.classList.add("x") : board.classList.add("circle");
@@ -67,4 +71,5 @@ rBtn.addEventListener("click", () => {
    cells.forEach((c) => {
       c.className = "cell";
    });
+   startGame();
 });
